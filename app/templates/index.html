@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>QA Dataset Generator</title>
+    <style>
+        body { font-family: sans-serif; max-width: 600px; margin: auto; padding: 2em; }
+        input { width: 100%; padding: 8px; margin-bottom: 1em; }
+        pre { background-color: #f4f4f4; padding: 1em; border: 1px solid #ddd; white-space: pre-wrap; }
+    </style>
+</head>
+<body>
+    <h1>Generate a QA Dataset</h1>
+    <form id="qaForm">
+        <label for="topic">Enter a Topic:</label>
+        <input type="text" id="topic" name="topic" required>
+        <button type="submit">Generate</button>
+    </form>
+    
+    <hr>
+    
+    <h2>Task Status</h2>
+    <div id="status">Submit a topic to see the status here.</div>
+    <pre id="result"></pre>
+
+    <script>
+        const form = document.getElementById('qaForm');
+        const statusDiv = document.getElementById('status');
+        const resultPre = document.getElementById('result');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const topic = document.getElementById('topic').value;
+            statusDiv.textContent = 'Starting task...';
+            resultPre.textContent = '';
+
+            const response = await fetch('/generate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `topic=${encodeURIComponent(topic)}`
+            });
+            const data = await response.json();
+            
+            statusDiv.textContent = `Task ${data.task_id} started. Checking status...`;
+            
+            const interval = setInterval(async () => {
+                const statusResponse = await fetch(`/status/${data.task_id}`);
+                const statusData = await statusResponse.json();
+                
+                statusDiv.textContent = `State: ${statusData.state}`;
+                resultPre.textContent = JSON.stringify(statusData.info, null, 2);
+
+                if (statusData.state === 'SUCCESS' || statusData.state === 'FAILURE') {
+                    if (statusData.result) {
+                        resultPre.textContent += '\n\n' + JSON.stringify(statusData.result, null, 2);
+                    }
+                    clearInterval(interval);
+                }
+            }, 2000); // Check every 2 seconds
+        });
+    </script>
+</body>
+</html>

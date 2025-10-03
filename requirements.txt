@@ -1,0 +1,11 @@
+Flask
+celery
+redis
+requests
+beautifulsoup4
+trafilatura
+google-search-results
+flask-cors
+crawlee
+playwright
+gunicorn
