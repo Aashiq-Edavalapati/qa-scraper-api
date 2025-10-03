@@ -1,11 +1,10 @@
 Flask
-celery
-redis
+gunicorn
 requests
 beautifulsoup4
-trafilatura
+python-dotenv
+wikipedia-api
 google-search-results
-flask-cors
+trafilatura
 crawlee
 playwright
-gunicorn
