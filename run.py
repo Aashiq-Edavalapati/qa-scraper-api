@@ -3,6 +3,7 @@ import threading
 import uuid
 import json
 from flask import Flask, request, jsonify, url_for, render_template
+from flask_cors import CORS  # <-- 1. IMPORT THIS
 from datetime import datetime
 
 # --- Bring in our existing data fetching and cleaning logic ---
@@ -12,6 +13,7 @@ from config import Config
 
 # --- App Setup ---
 app = Flask(__name__)
+CORS(app)  # <-- 2. INITIALIZE CORS HERE
 app.config.from_object(Config)
 
 # This in-memory dictionary will act as our simple task database
@@ -66,7 +68,7 @@ def run_scraping_task(task_id, topic, gnews_api_key, serpapi_api_key):
 @app.route('/')
 def index():
     """Serves the simple HTML page for testing."""
-    return render_template('index.html')
+    return "API is running." # Changed from render_template for simplicity
 
 @app.route('/generate', methods=['POST'])
 def generate():

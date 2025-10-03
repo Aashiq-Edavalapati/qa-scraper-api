@@ -8,3 +8,4 @@ google-search-results
 trafilatura
 crawlee
 playwright
+Flask-Cors
