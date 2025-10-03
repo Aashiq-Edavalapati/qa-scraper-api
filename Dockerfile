@@ -1,6 +1,6 @@
 # Step 1: Use the official Playwright base image from Microsoft.
-# This image already has Python, browsers, and all system dependencies installed!
-FROM mcr.microsoft.com/playwright/python:v1.40.0-jammy
+# This version matches the latest playwright python package.
+FROM mcr.microsoft.com/playwright/python:v1.55.0-jammy
 
 # Step 2: Set the working directory inside the container
 WORKDIR /app
